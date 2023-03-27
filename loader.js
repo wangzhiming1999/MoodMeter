@@ -1,0 +1,391 @@
+window.onload = () => {
+  let model = "";
+  let faceModel = "";
+  let allData = [];
+  let allFaceData = {};
+  let count = 0;
+  var video = document.getElementById("video");
+  const myChart3 = echarts.init(document.querySelector(".myChart3"));
+  const SIZE = 48;
+  const IMAGENET_CLASSES = ["Surprise", "Neutral", "Anger", "Happy", "Sad"];
+  let timer = 0;
+  // const myChart5 = echarts.init(document.querySelector(".myChart5"));
+  let chartArr = [];
+  // 统计坐标点
+  let dataArr = {};
+  // Create a canvas element to draw the video frames onto
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d");
+  // 按钮事件绑定
+  const startButton = document.querySelector(".startButton");
+  const endButton = document.querySelector(".endButton");
+  const uploadButton = document.querySelector(".uploadButton");
+  const useLocalButton = document.querySelector(".localButton");
+  const linkVideo = document.querySelector(".linkVideo");
+  startButton.addEventListener("click", () => {
+    startVideo();
+  });
+  endButton.addEventListener("click", () => {
+    endButton();
+  });
+  uploadButton.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader(); // 创建FileReader对象(文件对象)
+    console.log(reader);
+    reader.readAsDataURL(file);
+    reader.onload = (e) => {
+      // 读取成功时：
+      video.src = e.target.result;
+    };
+  });
+  useLocalButton.addEventListener("click", () => {
+    useLocalStream();
+  });
+  // 视频链接
+  linkVideo.addEventListener("change", (e) => {
+    video.src = e.target.value;
+  });
+
+  // 初始化加载模型
+  const init = async () => {
+    model = await tf.loadLayersModel("./models/model.json");
+    faceModel = await blazeface.load();
+    console.info("load models finished.");
+  };
+  init();
+  // 开始识别
+  const startVideo = () => {
+    timer = window.setInterval(() => {
+      detectImage();
+    }, 20);
+  };
+  // 停止识别
+  const endVideo = () => {
+    clearInterval(timer);
+  };
+
+  const disposeData = (item) => {
+    // 将数据统计次数 间隔10为一组数据
+    const [x, y] = item;
+    if (dataArr[parseInt(x)]?.[parseInt(y)]) {
+      dataArr[parseInt(x)][parseInt(y)] += 1;
+    } else {
+      dataArr[parseInt(x).toString()] = {};
+      dataArr[parseInt(x).toString()][parseInt(y).toString()] = 1;
+    }
+  };
+  // 使用本地流
+  const useLocalStream = () => {
+    // 用本地流
+    if (navigator.mediaDevices.getUserMedia) {
+      //最新的标准API
+      navigator.mediaDevices
+        .getUserMedia({ video: { width: 1920, height: 1080 } })
+        .then(success)
+        .catch(error);
+    } else if (navigator.webkitGetUserMedia) {
+      //webkit核心浏览器
+      navigator.webkitGetUserMedia(
+        { video: { width: 1920, height: 1080 } },
+        success,
+        error
+      );
+    } else if (navigator.mozGetUserMedia) {
+      //firfox浏览器
+      navigator.mozGetUserMedia(
+        { video: { width: 1920, height: 1080 } },
+        success,
+        error
+      );
+    } else if (navigator.getUserMedia) {
+      //旧版API
+      navigator.getUserMedia(
+        { video: { width: 1920, height: 1080 } },
+        success,
+        error
+      );
+    }
+    // 成功后拿到视频流
+    function success(stream) {
+      //将视频流设置为video元素的源
+      console.log(stream);
+      video.srcObject = stream;
+      video.play();
+    }
+    function error(error) {
+      console.log(`访问用户媒体设备失败${error.name}, ${error.message}`);
+    }
+  };
+
+  // 识别图片,并在页面展示
+  async function detectImage() {
+    canvas.width = video.offsetWidth;
+    canvas.height = video.offsetWidth * (video.videoHeight / video.videoWidth);
+    const imgWidth = Math.min(
+      canvas.width,
+      (video.videoWidth * canvas.height) / video.videoHeight
+    );
+    const imgHeight = Math.min(
+      canvas.height,
+      (video.videoHeight * canvas.width) / video.videoWidth
+    );
+
+    // 准备用于识别的样本
+    context.drawImage(
+      video,
+      0,
+      0,
+      video.videoWidth,
+      video.videoHeight,
+      (canvas.width - imgWidth) / 2,
+      (canvas.height - imgHeight) / 2,
+      imgWidth,
+      imgHeight
+    );
+    // Preprocess the canvas data
+    let imageData = context.getImageData(
+      0,
+      0,
+      video.offsetWidth,
+      video.offsetHeight
+    );
+
+    const returnTensors = false; // Pass in `true` to get tensors back, rather than values.
+    let predictions = await faceModel.estimateFaces(imageData, returnTensors);
+    if (predictions.length > 0) {
+      // get more faces in future
+      const start = predictions[0].topLeft;
+      const end = predictions[0].bottomRight;
+      const size = [end[0] - start[0], end[1] - start[1]];
+
+      var rect = [start[0], start[1], size[0], size[1]];
+
+      let face = context.getImageData(rect[0], rect[1], rect[2], rect[3]);
+      const tensor = tf.browser.fromPixels(face).toFloat();
+
+      const resized = tf.image.resizeBilinear(tensor, [SIZE, SIZE]);
+      const grayscale = resized.mean(2);
+      const normalized = grayscale.div(255.0);
+      const input = normalized.reshape([1, SIZE, SIZE, 1]);
+
+      const prob = model.predict(input);
+      // console.log(prob.arraySync())
+
+      var coordinates = convertProb(prob.arraySync());
+      drawPoint(coordinates);
+      drawFaceRect(rect);
+      allData.push(coordinates[0]);
+      disposeData(coordinates[0]);
+
+      count += 1;
+      if (count % 5 == 0) {
+        updateChart(coordinates[0]);
+      }
+      if (count % 50 === 0) {
+        initChart();
+      }
+
+      const index = prob.argMax(1).dataSync()[0];
+
+      setTimeout(() => {
+        const msg = IMAGENET_CLASSES[index];
+        allFaceData[msg] ? (allFaceData[msg] = 0) : (allFaceData[msg] += 1);
+        console.log(`预测结果：${msg}`);
+      }, 0);
+    }
+
+    function drawFaceRect(rect) {
+      context.beginPath();
+      context.lineWidth = "1";
+      context.strokeStyle = "yellow";
+      context.rect(rect[0], rect[1], rect[2], rect[3]);
+      context.stroke();
+    }
+    function drawPoint(coordinates) {
+      var color = "blue";
+
+      // 绘制散点图
+      for (var i = 0; i < coordinates.length; i++) {
+        context.fillStyle = color;
+        context.beginPath();
+        context.arc(
+          coordinates[i][0] + canvas.width / 2,
+          coordinates[i][1] + canvas.height / 2,
+          5,
+          0,
+          2 * Math.PI
+        );
+        // context.fill();
+        context.stroke();
+      }
+    }
+
+    // 权重 开心，惊讶, 害怕,生气，讨厌，悲伤,
+    function convertProb(prob) {
+      var coordinates = [
+        [34, 93],
+        [0, 0],
+        [-64, 76],
+        [98, 17],
+        [-86, -50],
+      ];
+      var res = multiply(prob, coordinates);
+      return res;
+    }
+
+    function multiply(a, b) {
+      var aNumRows = a.length,
+        aNumCols = a[0].length,
+        bNumRows = b.length,
+        bNumCols = b[0].length,
+        m = new Array(aNumRows); // initialize array of rows
+      for (var r = 0; r < aNumRows; ++r) {
+        m[r] = new Array(bNumCols); // initialize the current row
+        for (var c = 0; c < bNumCols; ++c) {
+          m[r][c] = 0; // initialize the current cell
+          for (var i = 0; i < aNumCols; ++i) {
+            m[r][c] += a[r][i] * b[i][c];
+          }
+        }
+      }
+      return m;
+    }
+  }
+
+  // 散点图
+  const updateChart = (point) => {
+    myChart3.setOption({
+      backgroundColor: "",
+      xAxis: {
+        type: "value",
+        scale: true,
+        max: 100,
+        min: -100,
+        interval: 20,
+        splitLine: { show: false },
+        axisTick: {
+          show: false, // 不显示坐标轴刻度线
+        },
+        axisLabel: {
+          show: false, // 不显示坐标轴上的文字
+        },
+      },
+      yAxis: {
+        type: "value",
+        scale: true,
+        max: 100,
+        min: -100,
+        interval: 20,
+        splitLine: { show: false },
+        axisTick: {
+          show: false, // 不显示坐标轴刻度线
+        },
+        axisLabel: {
+          show: false, // 不显示坐标轴上的文字
+        },
+      },
+      grid: {
+        left: "0", //距离左边的距离
+        right: "0", //距离右边的距离
+        bottom: "0", //距离下边的距离
+        top: "0", //距离上边的距离
+      },
+      series: [
+        {
+          type: "scatter",
+          symbolSize: function (val) {
+            return 16;
+          },
+          data: [point],
+        },
+      ],
+    });
+  };
+
+  // 数据表
+  const initChart = () => {
+    Object.keys(dataArr).forEach((x, index) => {
+      Object.keys(dataArr[x]).forEach((y) => {
+        chartArr.push([parseInt(x), parseInt(y), dataArr[x][y]]);
+      });
+    });
+    // myChart5Update();
+    setHetmapData();
+  };
+
+  const myChart5Update = () => {
+    console.log(chartArr);
+    myChart5.setOption({
+      xAxis: {
+        type: "value",
+        scale: true,
+        max: 100,
+        min: -100,
+        interval: 20,
+        splitLine: { show: false },
+        axisTick: {
+          show: false, // 不显示坐标轴刻度线
+        },
+        axisLabel: {
+          show: false, // 不显示坐标轴上的文字
+        },
+      },
+      yAxis: {
+        type: "value",
+        scale: true,
+        max: 100,
+        min: -100,
+        interval: 20,
+        splitLine: { show: false },
+        axisTick: {
+          show: false, // 不显示坐标轴刻度线
+        },
+        axisLabel: {
+          show: false, // 不显示坐标轴上的文字
+        },
+      },
+      grid: {
+        left: "0", //距离左边的距离
+        right: "0", //距离右边的距离
+        bottom: "0", //距离下边的距离
+        top: "0", //距离上边的距离
+      },
+      series: [
+        {
+          type: "scatter",
+          symbolSize: 6,
+          data: chartArr,
+        },
+      ],
+    });
+  };
+  // 热力图显示
+  var heatmapInstance = h337.create({
+    // only container is required, the rest will be defaults
+    //只需要一个container，也就是最终要绘制图形的dom节点，其他都默认
+    container: document.querySelector(".heatmap"),
+    radius: 8,
+    maxOpacity: 0.5,
+    minOpacity: 0,
+    blur: 0.75,
+  });
+  // 设置热力图数据
+  const setHetmapData = () => {
+    const baseNum = 2.5;
+    const points = chartArr.map((res) => {
+      return {
+        x: (res[0] + 100) * baseNum,
+        y: (res[1] + 100) * baseNum,
+        value: res[2],
+      };
+    });
+    console.log(points);
+    var data = {
+      max: 10, //所有数据中的最大值
+      data: points, //最终要展示的数据
+    };
+    // if you have a set of datapoints always use setData instead of addData
+    // for data initialization
+    heatmapInstance.setData(data);
+  };
+};
