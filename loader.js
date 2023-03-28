@@ -3,6 +3,9 @@ window.onload = () => {
   let faceModel = "";
   let allData = [];
   let allFaceData = {};
+  let chartArr = [];
+  // 统计坐标点
+  let dataArr = {};
   let count = 0;
   var video = document.getElementById("video");
   const myChart3 = echarts.init(document.querySelector(".myChart3"));
@@ -10,9 +13,7 @@ window.onload = () => {
   const IMAGENET_CLASSES = ["Surprise", "Neutral", "Anger", "Happy", "Sad"];
   let timer = 0;
   // const myChart5 = echarts.init(document.querySelector(".myChart5"));
-  let chartArr = [];
-  // 统计坐标点
-  let dataArr = {};
+
   // Create a canvas element to draw the video frames onto
   const canvas = document.createElement("canvas");
   const context = canvas.getContext("2d");
@@ -22,11 +23,12 @@ window.onload = () => {
   const uploadButton = document.querySelector(".uploadButton");
   const useLocalButton = document.querySelector(".localButton");
   const linkVideo = document.querySelector(".linkVideo");
-  startButton.addEventListener("click", () => {
+  video.addEventListener("play", () => {
+    console.log("开始识别");
     startVideo();
   });
   endButton.addEventListener("click", () => {
-    endButton();
+    endVideo();
   });
   uploadButton.addEventListener("change", (e) => {
     const file = e.target.files[0];
@@ -56,6 +58,12 @@ window.onload = () => {
   init();
   // 开始识别
   const startVideo = () => {
+    allData = [];
+    allFaceData = {};
+    chartArr = [];
+    // 统计坐标点
+    dataArr = {};
+    count = 0;
     timer = window.setInterval(() => {
       detectImage();
     }, 50);
