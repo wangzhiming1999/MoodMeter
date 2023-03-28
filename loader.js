@@ -51,13 +51,14 @@ window.onload = () => {
     model = await tf.loadLayersModel("./models/model.json");
     faceModel = await blazeface.load();
     console.info("load models finished.");
+    startVideo();
   };
   init();
   // 开始识别
   const startVideo = () => {
     timer = window.setInterval(() => {
       detectImage();
-    }, 20);
+    }, 50);
   };
   // 停止识别
   const endVideo = () => {
@@ -181,7 +182,7 @@ window.onload = () => {
       if (count % 5 == 0) {
         updateChart(coordinates[0]);
       }
-      if (count % 50 === 0) {
+      if (count % 20 === 0) {
         initChart();
       }
 
