@@ -1,7 +1,25 @@
+#container {
+  width: 100%;
+  color: #fff;
+}
 #container .containerView {
   position: relative;
   width: 400px;
   height: 400px;
+}
+#container .chartView {
+  display: flex;
+  position: relative;
+  justify-content: center;
+  margin-top: 16px;
+}
+#container .flex{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
 }
 
 .Surprise {
@@ -109,10 +127,11 @@
   border: 1px solid #2870ea;
 }
 #container video {
+  flex: 1;
   margin: auto;
   margin-top: 16px;
   max-height: 400px;
-  width: auto;
+  width: 100%;
   padding: 0;
 }
 #container .heatmap {

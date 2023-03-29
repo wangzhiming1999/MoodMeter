@@ -7,14 +7,11 @@ window.onload = () => {
   // 统计坐标点
   let dataArr = {};
   let count = 0;
-  var video = document.getElementById("video");
+  const video = document.getElementById("video");
   const myChart3 = echarts.init(document.querySelector(".myChart3"));
   const SIZE = 48;
   const IMAGENET_CLASSES = ["Surprise", "Neutral", "Anger", "Happy", "Sad"];
   let timer = 0;
-  // const myChart5 = echarts.init(document.querySelector(".myChart5"));
-
-  // Create a canvas element to draw the video frames onto
   const canvas = document.createElement("canvas");
   const context = canvas.getContext("2d");
   // 按钮事件绑定
@@ -26,7 +23,7 @@ window.onload = () => {
   video.addEventListener("play", () => {
     console.log("开始识别");
     initChart();
-    updateChart([0,0]);
+    updateChart([0, 0]);
     startVideo();
   });
   endButton.addEventListener("click", () => {
@@ -329,54 +326,8 @@ window.onload = () => {
     setHetmapData();
   };
 
-  const myChart5Update = () => {
-    console.log(chartArr);
-    myChart5.setOption({
-      xAxis: {
-        type: "value",
-        scale: true,
-        max: 100,
-        min: -100,
-        interval: 20,
-        splitLine: { show: false },
-        axisTick: {
-          show: false, // 不显示坐标轴刻度线
-        },
-        axisLabel: {
-          show: false, // 不显示坐标轴上的文字
-        },
-      },
-      yAxis: {
-        type: "value",
-        scale: true,
-        max: 100,
-        min: -100,
-        interval: 20,
-        splitLine: { show: false },
-        axisTick: {
-          show: false, // 不显示坐标轴刻度线
-        },
-        axisLabel: {
-          show: false, // 不显示坐标轴上的文字
-        },
-      },
-      grid: {
-        left: "0", //距离左边的距离
-        right: "0", //距离右边的距离
-        bottom: "0", //距离下边的距离
-        top: "0", //距离上边的距离
-      },
-      series: [
-        {
-          type: "scatter",
-          symbolSize: 6,
-          data: chartArr,
-        },
-      ],
-    });
-  };
   // 热力图显示
-  var heatmapInstance = h337.create({
+  const heatmapInstance = h337.create({
     // only container is required, the rest will be defaults
     //只需要一个container，也就是最终要绘制图形的dom节点，其他都默认
     container: document.querySelector(".heatmap"),
@@ -400,8 +351,6 @@ window.onload = () => {
       max: 10, //所有数据中的最大值
       data: points, //最终要展示的数据
     };
-    // if you have a set of datapoints always use setData instead of addData
-    // for data initialization
     heatmapInstance.setData(data);
   };
 };
