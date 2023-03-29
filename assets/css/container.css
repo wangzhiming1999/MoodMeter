@@ -109,8 +109,10 @@
   border: 1px solid #2870ea;
 }
 #container video {
+  margin: auto;
   margin-top: 16px;
-  height: auto;
+  max-height: 400px;
+  width: auto;
 }
 #container .heatmap {
   height: 400px;
