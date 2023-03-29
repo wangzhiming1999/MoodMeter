@@ -113,6 +113,7 @@
   margin-top: 16px;
   max-height: 400px;
   width: auto;
+  padding: 0;
 }
 #container .heatmap {
   height: 400px;

@@ -25,6 +25,8 @@ window.onload = () => {
   const linkVideo = document.querySelector(".linkVideo");
   video.addEventListener("play", () => {
     console.log("开始识别");
+    initChart();
+    updateChart([0,0]);
     startVideo();
   });
   endButton.addEventListener("click", () => {
@@ -65,11 +67,16 @@ window.onload = () => {
     dataArr = {};
     count = 0;
     timer = window.setInterval(() => {
-      detectImage();
+      if (faceModel) {
+        detectImage();
+      }
     }, 50);
   };
   // 停止识别
   const endVideo = () => {
+    if (video.srcObject) {
+      video.srcObject = null;
+    }
     clearInterval(timer);
   };
 
@@ -187,10 +194,10 @@ window.onload = () => {
       disposeData(coordinates[0]);
 
       count += 1;
-      if (count % 5 == 0) {
+      if (count % 3 == 0) {
         updateChart(coordinates[0]);
       }
-      if (count % 20 === 0) {
+      if (count % 10 === 0) {
         initChart();
       }
 
