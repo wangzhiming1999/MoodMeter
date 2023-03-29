@@ -8,6 +8,7 @@ body {
   font-style: normal;
   color: rgba(0, 0, 0, 0.7);
   overflow: auto;
+  background: #000;
 }
 * {
   margin: 0;
