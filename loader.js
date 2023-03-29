@@ -26,13 +26,20 @@ window.onload = () => {
     updateChart([0, 0]);
     startVideo();
   });
+  video.addEventListener(
+    "ended",
+    () => {
+      //结束
+      endVideo();
+    },
+    false
+  );
   endButton.addEventListener("click", () => {
     endVideo();
   });
   uploadButton.addEventListener("change", (e) => {
     const file = e.target.files[0];
     const reader = new FileReader(); // 创建FileReader对象(文件对象)
-    console.log(reader);
     reader.readAsDataURL(file);
     reader.onload = (e) => {
       // 读取成功时：
@@ -121,7 +128,6 @@ window.onload = () => {
     // 成功后拿到视频流
     function success(stream) {
       //将视频流设置为video元素的源
-      console.log(stream);
       video.srcObject = stream;
       video.play();
     }
@@ -170,26 +176,21 @@ window.onload = () => {
       const start = predictions[0].topLeft;
       const end = predictions[0].bottomRight;
       const size = [end[0] - start[0], end[1] - start[1]];
-
       var rect = [start[0], start[1], size[0], size[1]];
-
       let face = context.getImageData(rect[0], rect[1], rect[2], rect[3]);
       const tensor = tf.browser.fromPixels(face).toFloat();
-
       const resized = tf.image.resizeBilinear(tensor, [SIZE, SIZE]);
       const grayscale = resized.mean(2);
       const normalized = grayscale.div(255.0);
       const input = normalized.reshape([1, SIZE, SIZE, 1]);
 
       const prob = model.predict(input);
-      // console.log(prob.arraySync())
 
       var coordinates = convertProb(prob.arraySync());
-      drawPoint(coordinates);
-      drawFaceRect(rect);
+      // drawPoint(coordinates);
+      // drawFaceRect(rect);
       allData.push(coordinates[0]);
       disposeData(coordinates[0]);
-
       count += 1;
       if (count % 3 == 0) {
         updateChart(coordinates[0]);
@@ -197,14 +198,8 @@ window.onload = () => {
       if (count % 10 === 0) {
         initChart();
       }
-
-      const index = prob.argMax(1).dataSync()[0];
-
-      setTimeout(() => {
-        const msg = IMAGENET_CLASSES[index];
-        allFaceData[msg] ? (allFaceData[msg] = 0) : (allFaceData[msg] += 1);
-        console.log(`预测结果：${msg}`);
-      }, 0);
+      const msg = IMAGENET_CLASSES[prob.argMax(1).dataSync()[0]];
+      allFaceData[msg] ? (allFaceData[msg] = 0) : (allFaceData[msg] += 1);
     }
 
     function drawFaceRect(rect) {
@@ -215,11 +210,9 @@ window.onload = () => {
       context.stroke();
     }
     function drawPoint(coordinates) {
-      var color = "blue";
-
       // 绘制散点图
       for (var i = 0; i < coordinates.length; i++) {
-        context.fillStyle = color;
+        context.fillStyle = "blue";
         context.beginPath();
         context.arc(
           coordinates[i][0] + canvas.width / 2,
@@ -228,7 +221,7 @@ window.onload = () => {
           0,
           2 * Math.PI
         );
-        // context.fill();
+
         context.stroke();
       }
     }
@@ -317,12 +310,11 @@ window.onload = () => {
 
   // 数据表
   const initChart = () => {
-    Object.keys(dataArr).forEach((x, index) => {
+    Object.keys(dataArr).forEach((x) => {
       Object.keys(dataArr[x]).forEach((y) => {
         chartArr.push([parseInt(x), parseInt(y), dataArr[x][y]]);
       });
     });
-    // myChart5Update();
     setHetmapData();
   };
 
@@ -346,7 +338,6 @@ window.onload = () => {
         value: res[2],
       };
     });
-    console.log(points);
     var data = {
       max: 10, //所有数据中的最大值
       data: points, //最终要展示的数据

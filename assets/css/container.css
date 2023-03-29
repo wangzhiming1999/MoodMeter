@@ -1,3 +1,7 @@
+body {
+  background: #000;
+  color: #fff;
+}
 #container {
   width: 100%;
   color: #fff;
@@ -13,7 +17,7 @@
   justify-content: center;
   margin-top: 16px;
 }
-#container .flex{
+#container .flex {
   width: 100%;
   display: flex;
   align-items: center;
