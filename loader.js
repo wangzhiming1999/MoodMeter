@@ -380,7 +380,7 @@ window.onload = () => {
   });
   // 设置热力图数据
   const setHetmapData = () => {
-    const baseNum = 2.5;
+    const baseNum = 2;
     const points = chartArr.map((res) => {
       return {
         x: (res[0] + 100) * baseNum,
