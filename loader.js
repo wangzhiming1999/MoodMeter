@@ -12,7 +12,7 @@ window.onload = () => {
   const SIZE = 48;
   const IMAGENET_CLASSES = ["Surprise", "Neutral", "Anger", "Happy", "Sad"];
   let timer = 0;
-  const canvas = document.createElement("canvas");
+  const canvas = document.querySelector("#canvas");
   const context = canvas.getContext("2d");
   // 按钮事件绑定
   const startButton = document.querySelector(".startButton");
@@ -176,19 +176,18 @@ window.onload = () => {
       const start = predictions[0].topLeft;
       const end = predictions[0].bottomRight;
       const size = [end[0] - start[0], end[1] - start[1]];
-      var rect = [start[0], start[1], size[0], size[1]];
+      // var rect = [start[0], start[1], size[0], size[1]];
+      var rect = [start[0] - 10, start[1] - 80, size[0] + 10, size[1] + 100];
       let face = context.getImageData(rect[0], rect[1], rect[2], rect[3]);
       const tensor = tf.browser.fromPixels(face).toFloat();
       const resized = tf.image.resizeBilinear(tensor, [SIZE, SIZE]);
       const grayscale = resized.mean(2);
       const normalized = grayscale.div(255.0);
       const input = normalized.reshape([1, SIZE, SIZE, 1]);
-
       const prob = model.predict(input);
-
       var coordinates = convertProb(prob.arraySync());
-      // drawPoint(coordinates);
-      // drawFaceRect(rect);
+      drawPoint(coordinates);
+      drawFaceRect(rect);
       allData.push(coordinates[0]);
       disposeData(coordinates[0]);
       count += 1;
@@ -199,6 +198,7 @@ window.onload = () => {
         initChart();
       }
       const msg = IMAGENET_CLASSES[prob.argMax(1).dataSync()[0]];
+      console.log(msg);
       allFaceData[msg] ? (allFaceData[msg] = 0) : (allFaceData[msg] += 1);
     }
 
