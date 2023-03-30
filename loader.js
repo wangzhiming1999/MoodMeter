@@ -138,8 +138,8 @@ window.onload = () => {
 
   // 识别图片,并在页面展示
   async function detectImage() {
-    canvas.width = video.offsetWidth;
-    canvas.height = video.offsetWidth * (video.videoHeight / video.videoWidth);
+    canvas.width = video.offsetWidth * (video.videoWidth / video.videoHeight);
+    canvas.height = video.offsetHeight;
     const imgWidth = Math.min(
       canvas.width,
       (video.videoWidth * canvas.height) / video.videoHeight
@@ -171,6 +171,7 @@ window.onload = () => {
 
     const returnTensors = false; // Pass in `true` to get tensors back, rather than values.
     let predictions = await faceModel.estimateFaces(imageData, returnTensors);
+    console.log(predictions);
     if (predictions.length > 0) {
       // get more faces in future
       const start = predictions[0].topLeft;
