@@ -163,22 +163,34 @@ window.onload = () => {
     );
     // Preprocess the canvas data
     let imageData = context.getImageData(
-      0,
-      0,
-      video.offsetWidth,
-      video.offsetHeight
+      (canvas.width - imgWidth) / 2,
+      (canvas.height - imgHeight) / 2,
+      imgWidth,
+      imgHeight
     );
 
     const returnTensors = false; // Pass in `true` to get tensors back, rather than values.
+    drawFaceRect([
+      (canvas.width - imgWidth) / 2,
+      (canvas.height - imgHeight) / 2,
+      imgWidth,
+      imgHeight]);
+
     let predictions = await faceModel.estimateFaces(imageData, returnTensors);
     console.log(predictions);
     if (predictions.length > 0) {
       // get more faces in future
       const start = predictions[0].topLeft;
       const end = predictions[0].bottomRight;
+      const center = [(end[0] + start[0]) / 2, (end[1] + start[1]) / 2]
       const size = [end[0] - start[0], end[1] - start[1]];
-      // var rect = [start[0], start[1], size[0], size[1]];
-      var rect = [start[0] - 10, start[1] - 80, size[0] + 10, size[1] + 100];
+
+      const maxSide = Math.max(size[0], size[1]) * 1.3
+
+      var rect = [center[0] - maxSide / 2 + (canvas.width - imgWidth) / 2, center[1] - maxSide / 2 + (canvas.height - imgHeight) / 2, maxSide, maxSide]
+      // var rect = [start[0] - 0 + (canvas.width - imgWidth) / 2, start[1] - 0 + (canvas.height - imgHeight) / 2, size[0] + 0, size[1] + 0];
+      // var rect = [start[0] - 10, start[1] - 80, size[0] + 10, size[1] + 100];
+
       let face = context.getImageData(rect[0], rect[1], rect[2], rect[3]);
       const tensor = tf.browser.fromPixels(face).toFloat();
       const resized = tf.image.resizeBilinear(tensor, [SIZE, SIZE]);
@@ -187,7 +199,7 @@ window.onload = () => {
       const input = normalized.reshape([1, SIZE, SIZE, 1]);
       const prob = model.predict(input);
       var coordinates = convertProb(prob.arraySync());
-      drawPoint(coordinates);
+      // drawPoint(coordinates);
       drawFaceRect(rect);
       allData.push(coordinates[0]);
       disposeData(coordinates[0]);
@@ -228,10 +240,11 @@ window.onload = () => {
     }
 
     // 权重 开心，惊讶, 害怕,生气，讨厌，悲伤,
+    // const IMAGENET_CLASSES = ["Surprise", "Neutral", "Anger", "Happy", "Sad"];
     function convertProb(prob) {
       var coordinates = [
         [34, 93],
-        [0, 0],
+        [20, -20],
         [-64, 76],
         [98, 17],
         [-86, -50],
