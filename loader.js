@@ -12,7 +12,8 @@ window.onload = () => {
   const SIZE = 48;
   const IMAGENET_CLASSES = ["Surprise", "Neutral", "Anger", "Happy", "Sad"];
   let timer = 0;
-  const canvas = document.querySelector("#canvas");
+  // const canvas = document.querySelector("#canvas");
+  const canvas = document.createElement("canvas");
   const context = canvas.getContext("2d");
   // 按钮事件绑定
   const startButton = document.querySelector(".startButton");
@@ -176,9 +177,8 @@ window.onload = () => {
       imgWidth,
       imgHeight,
     ]);
-
     let predictions = await faceModel.estimateFaces(imageData, returnTensors);
-    console.log(predictions);
+   
     if (predictions.length > 0) {
       // get more faces in future
       const start = predictions[0].topLeft;
@@ -215,7 +215,7 @@ window.onload = () => {
         initChart();
       }
       const msg = IMAGENET_CLASSES[prob.argMax(1).dataSync()[0]];
-      console.log(msg);
+      // console.log(msg);
       allFaceData[msg] ? (allFaceData[msg] = 0) : (allFaceData[msg] += 1);
     }
 
