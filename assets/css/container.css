@@ -15,7 +15,8 @@ body {
   display: flex;
   position: relative;
   justify-content: center;
-  margin-top: 16px;
+  flex: 1;
+  transform: scale(0.8);
 }
 #container .flex {
   width: 100%;
@@ -123,12 +124,42 @@ body {
   color: chocolate;
   font-weight: bold;
 }
+/*测试添加 */
+.SurpriseT {
+  position: absolute;
+  left: -10%;
+  top: 36%;
+}
+
+.AngerT {
+  position: absolute;
+  right: 16%;
+  bottom: 0;
+}
+
+.HappyT {
+  position: absolute;
+  right: 45%;
+  top: -5%;
+}
+
+.SadT {
+  position: absolute;
+  left: 16%;
+  bottom: 0%;
+}
+.NeutralT {
+  position: absolute;
+  right: -10%;
+  top: 36%;
+}
 
 #container .myChart3 {
   width: 400px;
   height: 400px;
-  border-radius: 50%;
-  border: 1px solid #2870ea;
+  -webkit-clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+  clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+  background: #4a4b65;
 }
 #container video {
   flex: 1;
