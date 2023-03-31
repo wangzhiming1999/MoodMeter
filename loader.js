@@ -52,7 +52,13 @@ window.onload = () => {
   });
   // 视频链接
   linkVideo.addEventListener("change", (e) => {
-    video.src = e.target.value;
+    clearInterval(timer);
+    const url = e.target.value;
+    video.src = url;
+
+    if (url.includes("https://www.youtube.com/watch")) {
+      // axios.get("");
+    }
   });
 
   // 初始化加载模型
@@ -72,7 +78,7 @@ window.onload = () => {
     dataArr = {};
     count = 0;
     timer = window.setInterval(() => {
-      if (faceModel && video) {
+      if (faceModel && video && canvas) {
         detectImage();
       }
     }, 50);
@@ -82,6 +88,7 @@ window.onload = () => {
     if (video.srcObject) {
       video.srcObject = null;
     }
+    video.pause();
     clearInterval(timer);
   };
 
