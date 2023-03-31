@@ -255,11 +255,11 @@ window.onload = () => {
       // ];
       // [x,y]
       var coordinates = [
-        [-95, 30],
-        [95, -30],
-        [58, -80],
-        [0, 100],
-        [-58, -80],
+        [-70, 70],
+        [0, 0],
+        [70, -70],
+        [70, 70],
+        [-70, -70],
       ];
       var res = multiply(prob, coordinates);
       return res;
