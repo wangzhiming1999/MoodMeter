@@ -12,8 +12,8 @@ window.onload = () => {
   const SIZE = 48;
   const IMAGENET_CLASSES = ["Surprise", "Neutral", "Anger", "Happy", "Sad"];
   let timer = 0;
-  // const canvas = document.querySelector("#canvas");
-  const canvas = document.createElement("canvas");
+  const canvas = document.querySelector("#canvas");
+  // const canvas = document.createElement("canvas");
   const context = canvas.getContext("2d");
   // 按钮事件绑定
   const startButton = document.querySelector(".startButton");
@@ -60,7 +60,7 @@ window.onload = () => {
     model = await tf.loadLayersModel("./models/model.json");
     faceModel = await blazeface.load();
     console.info("load models finished.");
-    startVideo();
+    // startVideo();
   };
   init();
   // 开始识别
@@ -72,7 +72,7 @@ window.onload = () => {
     dataArr = {};
     count = 0;
     timer = window.setInterval(() => {
-      if (faceModel) {
+      if (faceModel && video) {
         detectImage();
       }
     }, 50);
@@ -178,7 +178,7 @@ window.onload = () => {
       imgHeight,
     ]);
     let predictions = await faceModel.estimateFaces(imageData, returnTensors);
-   
+
     if (predictions.length > 0) {
       // get more faces in future
       const start = predictions[0].topLeft;
