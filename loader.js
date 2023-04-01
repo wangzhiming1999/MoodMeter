@@ -54,10 +54,22 @@ window.onload = () => {
   linkVideo.addEventListener("change", (e) => {
     clearInterval(timer);
     const url = e.target.value;
-    video.src = url;
 
+    console.log(url);
     if (url.includes("https://www.youtube.com/watch")) {
-      // axios.get("");
+      axios({
+        method: "post",
+        url: `http://193.111.31.218:2082/tube/get_media_real_url?media_url=${url}`,
+      }).then((res) => {
+        const real_url = res.data.body.real_url;
+        if (real_url) {
+          video.src = real_url;
+        } else {
+          alert("request error");
+        }
+      });
+    }else{
+      video.src = url;
     }
   });
 
@@ -81,7 +93,7 @@ window.onload = () => {
       if (faceModel && video && canvas) {
         detectImage();
       }
-    }, 50);
+    }, 66);
   };
   // 停止识别
   const endVideo = () => {
