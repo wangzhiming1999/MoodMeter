@@ -35,6 +35,14 @@ window.onload = () => {
     },
     false
   );
+  video.addEventListener("error", function (event) {
+    if (event.target.error.code === MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED) {
+      alert("The video source is not supported.");
+    } else {
+      alert("An unknown error occurred.");
+    }
+  });
+
   endButton.addEventListener("click", () => {
     endVideo();
   });
@@ -54,20 +62,22 @@ window.onload = () => {
   linkVideo.addEventListener("change", (e) => {
     clearInterval(timer);
     const url = e.target.value;
-
-    console.log(url);
     if (url.includes("https://www.youtube.com/watch")) {
       axios({
         method: "post",
         url: `http://193.111.31.218:2082/tube/get_media_real_url?media_url=${url}`,
-      }).then((res) => {
-        const real_url = res.data.body.proxy_url;
-        if (real_url) {
-          video.src = real_url;
-        } else {
+      })
+        .then((res) => {
+          const real_url = res.data.body.proxy_url;
+          if (real_url) {
+            video.src = real_url;
+          } else {
+            alert("video url not find");
+          }
+        })
+        .catch((error) => {
           alert("request error");
-        }
-      });
+        });
     } else {
       video.src = url;
     }
