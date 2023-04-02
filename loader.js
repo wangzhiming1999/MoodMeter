@@ -61,14 +61,14 @@ window.onload = () => {
         method: "post",
         url: `http://193.111.31.218:2082/tube/get_media_real_url?media_url=${url}`,
       }).then((res) => {
-        const real_url = res.data.body.real_url;
+        const real_url = res.data.body.proxy_url;
         if (real_url) {
           video.src = real_url;
         } else {
           alert("request error");
         }
       });
-    }else{
+    } else {
       video.src = url;
     }
   });
@@ -89,6 +89,7 @@ window.onload = () => {
     // 统计坐标点
     dataArr = {};
     count = 0;
+    clearInterval(timer);
     timer = window.setInterval(() => {
       if (faceModel && video && canvas) {
         detectImage();
