@@ -75,7 +75,7 @@ window.onload = () => {
     if (url.includes("https://www.youtube.com/watch")) {
       axios({
         method: "post",
-        url: `http://193.111.31.218:2082/tube/get_media_real_url?media_url=${url}`,
+        url: `https://api.glarity.app/tube/get_media_real_url?media_url=${url}`,
       })
         .then((res) => {
           const real_url = res.data.body.proxy_url;
