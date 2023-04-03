@@ -14,7 +14,9 @@ window.onload = () => {
   let timer = 0;
   const canvas = document.querySelector("#canvas");
   // const canvas = document.createElement("canvas");
-  const context = canvas.getContext("2d");
+  const context = canvas.getContext("2d", {
+    willReadFrequently: true,
+  });
   // 按钮事件绑定
   const startButton = document.querySelector(".startButton");
   const endButton = document.querySelector(".endButton");
@@ -29,6 +31,14 @@ window.onload = () => {
   });
   video.addEventListener(
     "ended",
+    () => {
+      //结束
+      endVideo();
+    },
+    false
+  );
+  video.addEventListener(
+    "pause",
     () => {
       //结束
       endVideo();
@@ -65,7 +75,7 @@ window.onload = () => {
     if (url.includes("https://www.youtube.com/watch")) {
       axios({
         method: "post",
-        url: `http://193.111.31.218:2082/tube/get_media_real_url?media_url=${url}`,
+        url: `https://beta.paul.ren/jptest/tube/get_media_real_url?media_url=${url}`,
       })
         .then((res) => {
           const real_url = res.data.body.proxy_url;
@@ -169,6 +179,7 @@ window.onload = () => {
 
   // 识别图片,并在页面展示
   async function detectImage() {
+    console.log("识别");
     canvas.width = video.offsetWidth;
     canvas.height = video.offsetHeight;
     const imgWidth = Math.min(
