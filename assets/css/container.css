@@ -1,6 +1,9 @@
 body {
   background: #000;
   color: #fff;
+  position: relative;
+  margin: 0;
+  min-height: 100vh;
 }
 #container {
   width: 100%;
@@ -28,110 +31,11 @@ body {
   align-items: center;
 }
 
-.Surprise {
-  position: absolute;
-  right: 20%;
-  top: 5%;
-}
-
-.Anger {
-  position: absolute;
-  left: 16%;
-  top: 8%;
-}
-
-.Happy {
-  position: absolute;
-  right: -2%;
-  top: 35%;
-}
-
-.Sad {
-  position: absolute;
-  left: 4%;
-  bottom: 24%;
-}
-
-.Depressed {
-  position: absolute;
-  left: 5%;
-  bottom: 16%;
-}
-
-.Bored {
-  position: absolute;
-  left: 16%;
-  bottom: 8%;
-}
-
-.Tired {
-  position: absolute;
-  left: 40%;
-  bottom: 0;
-}
-
-.Sleepy {
-  position: absolute;
-  left: 52%;
-  bottom: 0px;
-}
-
-.Relaxed {
-  position: absolute;
-  right: 4%;
-  bottom: 20%;
-}
-
-.Excited {
-  position: absolute;
-  right: 12%;
-  top: 10%;
-}
-
-.Fear {
-  position: absolute;
-  left: 140px;
-  top: 10px;
-}
-
-.Positive {
-  position: absolute;
-  right: 0%;
-  top: 46%;
-  color: green;
-  font-weight: bold;
-}
-
-.Negative {
-  position: absolute;
-  left: 0px;
-  top: 46%;
-  color: red;
-  font-weight: bold;
-}
-
-.Calm {
-  position: absolute;
-  bottom: -4%;
-  left: 46%;
-  color: blue;
-  font-weight: bold;
-}
-
-.Exciting {
-  position: absolute;
-  top: -4%;
-  left: 46%;
-  color: chocolate;
-  font-weight: bold;
-}
-/*测试添加 */
 .SurpriseT {
   position: absolute;
   left: 0%;
   top: 10%;
 }
-
 .AngerT {
   position: absolute;
   right: 0%;
@@ -168,7 +72,6 @@ body {
   max-height: 400px;
   width: 100%;
   padding: 0;
- 
 }
 #container .heatmap {
   height: 400px;
@@ -227,4 +130,25 @@ body {
 .iframeView {
   width: 720px;
   height: 480px;
+}
+#footer {
+  width: 100%;
+  font-size: 16px;
+  background: #fff;
+  padding: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+#footer a {
+  width: 180px;
+  display: flex;
+  align-items: center;
+}
+#footer img {
+  width: 40px;
+  height: 40px;
+  margin: 12px;
 }
