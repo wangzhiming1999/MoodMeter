@@ -19,6 +19,14 @@
   <meta http-equiv="Cache-Control" content="no-cache">
   <meta http-equiv="Cache" content="no-cache">
   <script src="./loader.js"></script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KSGDGY9XV2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-KSGDGY9XV2');
+  </script>
 </head>
 
 <body>
@@ -45,27 +53,49 @@
           <div class="heatmap"> </div>
         </div>
       </div>
-      <canvas id="canvas"></canvas>
+      <!-- <canvas id="canvas"></canvas> -->
       <video id="video"
         src="https://api.glarity.app/ytb/rr2---sn-oguesn6y?expire=1680602317&ei=baArZMuRMM_BqAHvmKrYAQ&ip=2403%3A71c0%3A2000%3A%3Ad6%3Ae723&id=o-APISFF2mqF5f8JKqK-dXFIe2h9EnzLOsvGLthKfnLEWP&itag=22&source=youtube&requiressl=yes&mh=yp&mm=31%2C26&mn=sn-oguesn6y%2Csn-npoldn7z&ms=au%2Conr&mv=m&mvi=2&pl=48&initcwndbps=1466250&vprv=1&mime=video%2Fmp4&cnr=14&ratebypass=yes&dur=188.429&lmt=1674106434077536&mt=1680580403&fvip=2&fexp=24007246&c=ANDROID&txp=4532434&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cvprv%2Cmime%2Ccnr%2Cratebypass%2Cdur%2Clmt&sig=AOq0QJ8wRQIhAM5EQLuobt25AWfxAM7QT2maB7fGwWHyPncJux-MCWdAAiB6BmEwpXMGpUoVsliEpm2sH7ps_zjri5X_FhoMnFf0cQ%3D%3D&lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cinitcwndbps&lsig=AG3C_xAwRAIgH2GJhuqpwnvGbjTmhuXwoAHc0CiM3BAyLzFzl3-pQhUCIHcPlUnzsWAKJz_hd_nh_qU1RLalX7Jo9aaAsdAaOHki"
         crossorigin="" controls autoplay muted></video>
     </div>
     <div class="disposeView">
       <button class="moodmeterStart endButton">Stop</button>
+      <div class="input"> <input type="text" class="linkVideo" placeholder="Paste your YouTube video link here" />
+        <button class="submit">Submit</button>
+      </div>
       <button class="moodmeterStart localButton">Turn on the camera</button>
-      <input type="text" class="linkVideo" placeholder="YouTube video link">
       <button class="moodmeterStart uploadButton"> Open a local file <input type="file"
           class="uploadButton"></input></button>
     </div>
   </section>
   <section id="footer">
-    <a href="https://felo.me"><img src="https://www.felo.me/homepage/static/logo.c8f43f20.png" alt=""> Felo</a>
-    <a href="https://meet.felo.me"><img src="./assets/images/favicon.svg" alt=""> Felo Meet</a>
-    <a href="https://circleo.me"><img src="./assets/images/Circleo.png" alt=""> Circleo</a>
-    <a href="https://glarity.app"><img src="https://glarity.app/img/logo.png" alt=""> Glarity</a>
-    <a href="https://gptbase.ai/"> <img src="	https://huggingface.co/front/assets/huggingface_logo-noborder.svg"
-        alt="">GPTBase</a>
-    <a href="https://discord.gg/R3wd5DSQ6z"><img src="./assets/images/discord.png" alt="">Join Us</a>
+    <div class="item"><a href="https://felo.me"><img src="https://www.felo.me/homepage/static/logo.c8f43f20.png" alt="">
+        <span>Felo</span>
+        <div class="tip">The next generation All-in-One work communication platform</div>
+      </a></div>
+    <div class="item"> <a href="https://meet.felo.me"> <img src="./assets/images/favicon.svg" alt="">
+        <span>Felo Meet</span>
+        <div class="tip">Effortless communication, in any language</div>
+      </a></div>
+    <div class="item"> <a href="https://circleo.me"><img src="./assets/images/Circleo.png" alt="">
+        <span> Circleo</span>
+        <div class="tip">Create a Digital Space for Remote Collaboration
+        </div>
+      </a></div>
+    <div class="item"> <a href="https://glarity.app"><img src="https://glarity.app/img/logo.png" alt="">
+        <span>Glarity</span>
+        <div class="tip">Summary for Google/YouTube (ChatGPT)</div>
+      </a>
+    </div>
+    <div class="item"> <a href="https://gptbase.ai/"> <span style="font-size: 36px;">🦉</span>
+        <span>GPTBase</span>
+        <div class="tip">Train, Publish and Trade your own GPT AI with special knowledge-models and skills</div>
+      </a></div>
+    <div class="item"><a href="https://discord.gg/R3wd5DSQ6z"><img src="./assets/images/discord.png" alt="">
+        <span> Join Us </span>
+        <div class="tip">Felo discord community</div>
+      </a>
+    </div>
   </section>
 </body>
 

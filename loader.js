@@ -12,8 +12,8 @@ window.onload = () => {
   const SIZE = 48;
   const IMAGENET_CLASSES = ["Surprise", "Neutral", "Anger", "Happy", "Sad"];
   let timer = 0;
-  const canvas = document.querySelector("#canvas");
-  // const canvas = document.createElement("canvas");
+  // const canvas = document.querySelector("#canvas");
+  const canvas = document.createElement("canvas");
   const context = canvas.getContext("2d", {
     willReadFrequently: true,
   });
@@ -23,6 +23,10 @@ window.onload = () => {
   const uploadButton = document.querySelector(".uploadButton");
   const useLocalButton = document.querySelector(".localButton");
   const linkVideo = document.querySelector(".linkVideo");
+  const submitButton = document.querySelector(".submit");
+  submitButton.addEventListener("click", () => {
+    changeYouTobeUrl(document.querySelector(".linkVideo").value);
+  });
   video.addEventListener("play", () => {
     console.log("开始识别");
     initChart();
@@ -72,6 +76,9 @@ window.onload = () => {
   linkVideo.addEventListener("change", (e) => {
     clearInterval(timer);
     const url = e.target.value;
+    changeYouTobeUrl(url);
+  });
+  const changeYouTobeUrl = (url) => {
     if (url.includes("https://www.youtube.com/watch")) {
       axios({
         method: "post",
@@ -91,8 +98,7 @@ window.onload = () => {
     } else {
       video.src = url;
     }
-  });
-
+  };
   // 初始化加载模型
   const init = async () => {
     model = await tf.loadLayersModel("./models/model.json");

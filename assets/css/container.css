@@ -120,7 +120,7 @@ body {
   transition: all 0.4s ease-in-out;
   border: 2px solid transparent;
   background: #0fc4a5;
-  margin: 20px 0;
+  margin-bottom: 20px;
   box-sizing: border-box;
 }
 .disposeView .linkVideo {
@@ -146,6 +146,22 @@ body {
   height: 56px;
   width: 100%;
 }
+.disposeView .input {
+  width: 80%;
+  margin: auto;
+  display: flex;
+  margin-bottom: 20px;
+}
+.disposeView .submit {
+  height: 60px;
+  border: none;
+  width: 20%;
+  background: #0fc4a5;
+  font-size: 18px;
+  color: #fff;
+  box-shadow: none;
+  border-radius: 4px;
+}
 .iframeView {
   width: 720px;
   height: 480px;
@@ -153,7 +169,6 @@ body {
 #footer {
   width: 100%;
   font-size: 16px;
-  background: #fff;
   padding: 12px;
   display: flex;
   flex-wrap: wrap;
@@ -161,10 +176,26 @@ body {
   justify-content: space-between;
   box-sizing: border-box;
 }
+#footer .item {
+  width: 176px;
+  height: 188px;
+  border: 1px solid #ffffff;
+  border-radius: 10px;
+  margin-bottom: 32px;
+  padding: 12px;
+  box-sizing: border-box;
+  text-align: center;
+}
+#footer .item .tip {
+  font-size: 12px;
+  margin-top: 12px;
+}
 #footer a {
   display: flex;
   align-items: center;
   color: #2994ff;
+  text-decoration: none;
+  flex-direction: column;
 }
 #footer img {
   width: 40px;
