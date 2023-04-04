@@ -8,44 +8,33 @@
   <meta name="description" content="TransFrom-based facial emotion recognition tool" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.svg" />
-  <!-- Place favicon.ico in the root directory -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.1.0/dist/tf.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.1/echarts.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/blazeface"></script>
   <script src="https://cdn.bootcdn.net/ajax/libs/heatmap.js/2.0.0/heatmap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <!-- ========================= CSS here ========================= -->
-  <!-- <link rel="stylesheet" href="assets/css/bootstrap-5.0.0-beta2.min.css" /> -->
-  <!-- <link rel="stylesheet" href="assets/css/main.css" /> -->
   <link rel="stylesheet" href="assets/css/container.css" />
   <meta http-equiv="Expires" content="0">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Cache-Control" content="no-cache">
   <meta http-equiv="Cache" content="no-cache">
-
   <script src="./loader.js"></script>
 </head>
 
 <body>
+  <div class="title">
+    Felo MoodMeter (Beta)
+  </div>
   <section id="container">
-    <!-- <canvas id="canvas" crossorigin=""></canvas> -->
-    <section id="footer">
-      <a href="https://felo.me"><img src="https://www.felo.me/homepage/static/logo.c8f43f20.png" alt=""> Felo</a>
-      <a href="https://meet.felo.me"><img src="./assets/images/favicon.svg" alt=""> Felo Meet</a>
-      <a href="https://circleo.me"><img src="./assets/images/Circleo.png" alt="">
-        Circleo</a>
-      <a href="https://glarity.app"><img src="https://glarity.app/img/logo.png" alt=""> Glarity</a>
-      <a href="https://huggingface.co/gptbase"> <img
-          src="	https://huggingface.co/front/assets/huggingface_logo-noborder.svg" alt=""> Hugging Face</a>
-
-      <a href="https://discord.gg/R3wd5DSQ6z"><img src="./assets/images/discord.png" alt="">Join Us</a>
-    </section>
+    <div class="description">
+      TransFrom-based facial emotion recognition tool
+    </div>
+    <!-- <canvas id="canvas"></canvas> -->
     <div class="flex">
       <div class="chartView">
         <div class="containerView">
           <div class="myChart3">
           </div>
-
           <div class="SurpriseT">Surprise</div>
           <div class="AngerT">Anger</div>
           <div class="HappyT">Happy</div>
@@ -58,7 +47,6 @@
       </div>
       <video id="video" src="./video.mp4" crossorigin="" controls autoplay muted></video>
     </div>
-
     <div class="disposeView">
       <button class="moodmeterStart endButton">Stop</button>
       <button class="moodmeterStart localButton">Turn on the camera</button>
@@ -67,7 +55,15 @@
           class="uploadButton"></input></button>
     </div>
   </section>
-
+  <section id="footer">
+    <a href="https://felo.me"><img src="https://www.felo.me/homepage/static/logo.c8f43f20.png" alt=""> Felo</a>
+    <a href="https://meet.felo.me"><img src="./assets/images/favicon.svg" alt=""> Felo Meet</a>
+    <a href="https://circleo.me"><img src="./assets/images/Circleo.png" alt=""> Circleo</a>
+    <a href="https://glarity.app"><img src="https://glarity.app/img/logo.png" alt=""> Glarity</a>
+    <a href="https://gptbase.ai/"> <img src="	https://huggingface.co/front/assets/huggingface_logo-noborder.svg"
+        alt="">GPTBase</a>
+    <a href="https://discord.gg/R3wd5DSQ6z"><img src="./assets/images/discord.png" alt="">Join Us</a>
+  </section>
 </body>
 
 </html>
