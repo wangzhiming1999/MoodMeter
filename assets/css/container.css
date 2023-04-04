@@ -5,12 +5,12 @@ body {
   margin: 0;
 }
 .logo {
-  width: 80px;
-  border-radius: 50%;
+  width: 60px;
+  margin-right: 20px;
+  border-radius: 12px;
 }
 .title {
   width: 100%;
-  background: #fff;
   font-size: 24px;
   font-weight: bold;
   padding: 12px;
@@ -184,12 +184,13 @@ body {
 #footer .item {
   width: 176px;
   height: 188px;
-  border: 1px solid #ffffff;
+  border: 1px solid #333;
   border-radius: 10px;
   margin-bottom: 32px;
   padding: 12px;
   box-sizing: border-box;
   text-align: center;
+  box-shadow: none;
 }
 #footer .item .tip {
   font-size: 12px;
