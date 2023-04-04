@@ -202,3 +202,18 @@ body {
   height: 40px;
   margin: 12px;
 }
+.footerTip {
+  width: 80%;
+  text-align: center;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.8);
+  margin: auto;
+  margin-bottom: 40px;
+}
+
+.Safety {
+  width: 100%;
+  text-align: center;
+  padding-bottom: 12px;
+  cursor: pointer;
+}
