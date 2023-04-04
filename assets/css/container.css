@@ -17,7 +17,6 @@ body {
 #container {
   width: 100%;
   color: #fff;
-  min-height: 90vh;
 }
 #container .containerView {
   position: relative;
