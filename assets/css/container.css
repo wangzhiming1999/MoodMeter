@@ -81,6 +81,9 @@ body {
   width: 400px;
   height: 400px;
 }
+#container canvas {
+  max-height: 400px;
+}
 #container video {
   flex: 1;
   margin: auto;
@@ -159,7 +162,6 @@ body {
   box-sizing: border-box;
 }
 #footer a {
-  
   display: flex;
   align-items: center;
   color: #2994ff;

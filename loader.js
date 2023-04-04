@@ -12,8 +12,8 @@ window.onload = () => {
   const SIZE = 48;
   const IMAGENET_CLASSES = ["Surprise", "Neutral", "Anger", "Happy", "Sad"];
   let timer = 0;
-  // const canvas = document.querySelector("#canvas");
-  const canvas = document.createElement("canvas");
+  const canvas = document.querySelector("#canvas");
+  // const canvas = document.createElement("canvas");
   const context = canvas.getContext("2d", {
     willReadFrequently: true,
   });
@@ -262,7 +262,7 @@ window.onload = () => {
 
     function drawFaceRect(rect) {
       context.beginPath();
-      context.lineWidth = "1";
+      context.lineWidth = "2";
       context.strokeStyle = "yellow";
       context.rect(rect[0], rect[1], rect[2], rect[3]);
       context.stroke();
