@@ -1,4 +1,4 @@
-# 基于TensorFlow.js 的表情仪表盘
+# 首个基于TensorFlow.js 将视频人脸表情数据可视化的web应用
 
 ## 简介
    人脸情绪识别是一种计算机视觉技术，旨在通过分析人脸表情，自动识别人的情绪状态。这种技术通常使用图像处理和模式识别算法来提取面部表情特征并进行分类。
@@ -18,3 +18,46 @@
 - 坐标热力图统计用户情绪范围波动
 ## 原理
    第一步预处理及人脸获取，第二步，特征提取，第三步，归类。将重点放在人脸整体上，将人脸整体进行分析处理。将重点放在表情关键部分。人脸表情主要体现在眼睛、鼻子、嘴巴、眉毛四个关键部分，通过对这四个关键部分的定位，可以将人脸特征选择缩小至这些部位中,将人脸表情转化成像素坐标，与模型进行匹配，最后得出情绪坐标数据。
+
+## 使用方式
+- clone 项目地址 
+` git clone https://github.com/sparticleinc/mood_meter.git `
+- 加载模型
+
+```js
+model = await tf.loadLayersModel("./models/model.json");
+faceModel = await blazeface.load();
+```
+- 获取video元素与创建画布
+
+```js
+const video = document.getElementById("video");
+const context = canvas.getContext("2d", {  willReadFrequently: true, });
+```
+- 对视频进行截图
+```js                                  
+context.drawImage(                 
+video,                                
+ 0,                                   
+ 0,                                    
+ video.videoWidth,                     
+ video.videoHeight,                   
+(canvas.width - imgWidth) / 2,        
+ (canvas.height - imgHeight) / 2,      
+ imgWidth,                             
+ imgHeight                             
+ );                                   
+     
+ let imageData = context.getImageData( 
+ (canvas.width - imgWidth) / 2,        
+ (canvas.height - imgHeight) / 2,      
+ imgWidth,                             
+ imgHeight                             
+ );
+```
+- 开始识别
+
+```js
+let imageData = context.getImageData((canvas.width - imgWidth) / 2, (canvas.height - imgHeight) / 2, imgWidth, imgHeight);
+let predictions = await faceModel.estimateFaces(imageData, returnTensors);
+```
