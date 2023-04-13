@@ -4,7 +4,6 @@ window.onload = () => {
   let allData = [];
   let allFaceData = {};
   let chartArr = [];
-  // 统计坐标点
   let dataArr = {};
   let count = 0;
   const video = document.getElementById("video");
@@ -17,7 +16,7 @@ window.onload = () => {
   const context = canvas.getContext("2d", {
     willReadFrequently: true,
   });
-  // 按钮事件绑定
+
   const startButton = document.querySelector(".startButton");
   const endButton = document.querySelector(".endButton");
   const uploadButton = document.querySelector(".uploadButton");
@@ -36,7 +35,6 @@ window.onload = () => {
   video.addEventListener(
     "ended",
     () => {
-      //结束
       endVideo();
     },
     false
@@ -44,7 +42,6 @@ window.onload = () => {
   video.addEventListener(
     "pause",
     () => {
-      //结束
       endVideo();
     },
     false
@@ -62,17 +59,16 @@ window.onload = () => {
   });
   uploadButton.addEventListener("change", (e) => {
     const file = e.target.files[0];
-    const reader = new FileReader(); // 创建FileReader对象(文件对象)
+    const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = (e) => {
-      // 读取成功时：
       video.src = e.target.result;
     };
   });
   useLocalButton.addEventListener("click", () => {
     useLocalStream();
   });
-  // 视频链接
+
   linkVideo.addEventListener("change", (e) => {
     clearInterval(timer);
     const url = e.target.value;
@@ -99,20 +95,18 @@ window.onload = () => {
       video.src = url;
     }
   };
-  // 初始化加载模型
+
   const init = async () => {
     model = await tf.loadLayersModel("./models/model.json");
     faceModel = await blazeface.load();
     console.info("load models finished.");
-    // startVideo();
   };
   init();
-  // 开始识别
+
   const startVideo = () => {
     allData = [];
     allFaceData = {};
     chartArr = [];
-    // 统计坐标点
     dataArr = {};
     count = 0;
     clearInterval(timer);
@@ -122,7 +116,7 @@ window.onload = () => {
       }
     }, 66);
   };
-  // 停止识别
+
   const endVideo = () => {
     if (video.srcObject) {
       video.srcObject = null;
@@ -132,7 +126,6 @@ window.onload = () => {
   };
 
   const disposeData = (item) => {
-    // 将数据统计次数 间隔10为一组数据
     const [x, y] = item;
     if (dataArr[parseInt(x)]?.[parseInt(y)]) {
       dataArr[parseInt(x)][parseInt(y)] += 1;
@@ -141,40 +134,34 @@ window.onload = () => {
       dataArr[parseInt(x).toString()][parseInt(y).toString()] = 1;
     }
   };
-  // 使用本地流
+
   const useLocalStream = () => {
-    // 用本地流
     if (navigator.mediaDevices.getUserMedia) {
-      //最新的标准API
       navigator.mediaDevices
         .getUserMedia({ video: { width: 1920, height: 1080 } })
         .then(success)
         .catch(error);
     } else if (navigator.webkitGetUserMedia) {
-      //webkit核心浏览器
       navigator.webkitGetUserMedia(
         { video: { width: 1920, height: 1080 } },
         success,
         error
       );
     } else if (navigator.mozGetUserMedia) {
-      //firfox浏览器
       navigator.mozGetUserMedia(
         { video: { width: 1920, height: 1080 } },
         success,
         error
       );
     } else if (navigator.getUserMedia) {
-      //旧版API
       navigator.getUserMedia(
         { video: { width: 1920, height: 1080 } },
         success,
         error
       );
     }
-    // 成功后拿到视频流
+
     function success(stream) {
-      //将视频流设置为video元素的源
       video.srcObject = stream;
       video.play();
     }
@@ -183,7 +170,6 @@ window.onload = () => {
     }
   };
 
-  // 识别图片,并在页面展示
   async function detectImage() {
     console.log("识别");
     canvas.width = video.offsetWidth;
@@ -197,7 +183,6 @@ window.onload = () => {
       (video.videoHeight * canvas.width) / video.videoWidth
     );
 
-    // 准备用于识别的样本
     context.drawImage(
       video,
       0,
@@ -209,7 +194,7 @@ window.onload = () => {
       imgWidth,
       imgHeight
     );
-    // Preprocess the canvas data
+
     let imageData = context.getImageData(
       (canvas.width - imgWidth) / 2,
       (canvas.height - imgHeight) / 2,
@@ -217,7 +202,7 @@ window.onload = () => {
       imgHeight
     );
 
-    const returnTensors = false; // Pass in `true` to get tensors back, rather than values.
+    const returnTensors = false;
     drawFaceRect([
       (canvas.width - imgWidth) / 2,
       (canvas.height - imgHeight) / 2,
@@ -227,7 +212,6 @@ window.onload = () => {
     let predictions = await faceModel.estimateFaces(imageData, returnTensors);
 
     if (predictions.length > 0) {
-      // get more faces in future
       const start = predictions[0].topLeft;
       const end = predictions[0].bottomRight;
       const center = [(end[0] + start[0]) / 2, (end[1] + start[1]) / 2];
@@ -262,7 +246,7 @@ window.onload = () => {
         initChart();
       }
       const msg = IMAGENET_CLASSES[prob.argMax(1).dataSync()[0]];
-      // console.log(msg);
+
       allFaceData[msg] ? (allFaceData[msg] = 0) : (allFaceData[msg] += 1);
     }
 
@@ -274,7 +258,6 @@ window.onload = () => {
       context.stroke();
     }
     function drawPoint(coordinates) {
-      // 绘制散点图
       for (var i = 0; i < coordinates.length; i++) {
         context.fillStyle = "blue";
         context.beginPath();
@@ -290,17 +273,7 @@ window.onload = () => {
       }
     }
 
-    // const IMAGENET_CLASSES = ["Surprise", "Neutral", "Anger", "Happy", "Sad"];
-    // 18,90，162，234，306
     function convertProb(prob) {
-      // var coordinates = [
-      //   [34, 93],
-      //   [20, -20],
-      //   [-64, 76],
-      //   [98, 17],
-      //   [-86, -50],
-      // ];
-      // [x,y]
       var coordinates = [
         [-70, 70],
         [0, 0],
@@ -317,11 +290,11 @@ window.onload = () => {
         aNumCols = a[0].length,
         bNumRows = b.length,
         bNumCols = b[0].length,
-        m = new Array(aNumRows); // initialize array of rows
+        m = new Array(aNumRows);
       for (var r = 0; r < aNumRows; ++r) {
-        m[r] = new Array(bNumCols); // initialize the current row
+        m[r] = new Array(bNumCols);
         for (var c = 0; c < bNumCols; ++c) {
-          m[r][c] = 0; // initialize the current cell
+          m[r][c] = 0;
           for (var i = 0; i < aNumCols; ++i) {
             m[r][c] += a[r][i] * b[i][c];
           }
@@ -331,7 +304,6 @@ window.onload = () => {
     }
   }
 
-  // 散点图
   const updateChart = (point) => {
     myChart3.setOption({
       backgroundColor: "",
@@ -343,10 +315,10 @@ window.onload = () => {
         interval: 20,
         splitLine: { show: false },
         axisTick: {
-          show: false, // 不显示坐标轴刻度线
+          show: false,
         },
         axisLabel: {
-          show: false, // 不显示坐标轴上的文字
+          show: false,
         },
       },
       yAxis: {
@@ -357,17 +329,17 @@ window.onload = () => {
         interval: 20,
         splitLine: { show: false },
         axisTick: {
-          show: false, // 不显示坐标轴刻度线
+          show: false,
         },
         axisLabel: {
-          show: false, // 不显示坐标轴上的文字
+          show: false,
         },
       },
       grid: {
-        left: "0", //距离左边的距离
-        right: "0", //距离右边的距离
-        bottom: "0", //距离下边的距离
-        top: "0", //距离上边的距离
+        left: "0",
+        right: "0",
+        bottom: "0",
+        top: "0",
       },
       series: [
         {
@@ -381,7 +353,6 @@ window.onload = () => {
     });
   };
 
-  // 数据表
   const initChart = () => {
     Object.keys(dataArr).forEach((x) => {
       Object.keys(dataArr[x]).forEach((y) => {
@@ -391,17 +362,14 @@ window.onload = () => {
     setHetmapData();
   };
 
-  // 热力图显示
   const heatmapInstance = h337.create({
-    // only container is required, the rest will be defaults
-    //只需要一个container，也就是最终要绘制图形的dom节点，其他都默认
     container: document.querySelector(".heatmap"),
     radius: 8,
     maxOpacity: 0.5,
     minOpacity: 0,
     blur: 0.75,
   });
-  // 设置热力图数据
+
   const setHetmapData = () => {
     const baseNum = 2;
     const points = chartArr.map((res) => {
@@ -412,8 +380,8 @@ window.onload = () => {
       };
     });
     var data = {
-      max: 10, //所有数据中的最大值
-      data: points, //最终要展示的数据
+      max: 10,
+      data: points,
     };
     heatmapInstance.setData(data);
   };

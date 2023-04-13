@@ -1,3 +1,74 @@
+# The first web application based on TensorFlow .js to visualize video facial expression data
+
+## Brief introduction
+   Face emotion recognition is a computer vision technology that aims to automatically identify people's emotional states by analyzing facial expressions. This technique typically uses image processing and pattern recognition algorithms to extract facial expression features and classify them.
+
+The application of face emotion recognition is very wide, including but not limited to the following areas:
+
+1.  Psychological Research: Helps psychologists study patterns of human emotional expression and emotional changes
+1.  Human-computer interaction: Improve the user experience of intelligent interaction systems, such as emotional state monitoring of autonomous vehicles
+1. Social media: On social media platforms, automatically identify users' emotions and provide them with more personalized services.
+1.  Security field: monitoring places use face emotion recognition to enhance security precautions.
+
+In recent years, with the development of deep learning technology, the accuracy and efficiency of face emotion recognition have been significantly improved, and it has become one of the hot research directions in the field of computer vision.
+## blips
+- High frequency recognition of face emotions
+- Preserve user privacy and do not save any user resources
+- Real-time display of expression coordinate points, efficient recognition of user emotions
+- Coordinate heat map to count fluctuations in user sentiment range
+## Principle
+   Step 1: Preprocessing and face acquisition, Step 2, Feature extraction, and Step 3, Classification. Focus on the face as a whole, and analyze and process the face as a whole. Focus on the key parts of the expression. Face expressions are mainly reflected in the four key parts of eyes, nose, mouth and eyebrows, through the positioning of these four key parts, the selection of face features can be narrowed to these parts, the face expression is converted into pixel coordinates, matched with the model, and finally the emotional coordinate data is obtained.
+
+## How to use it
+- Clone project address 
+` git clone https://github.com/sparticleinc/mood_meter.git `
+- Load the model
+
+```js
+model = await tf.loadLayersModel("./models/model.json");
+faceModel = await blazeface.load();
+```
+- Get the video element with the creation canvas
+
+```js
+const video = document.getElementById("video");
+const context = canvas.getContext("2d", {  willReadFrequently: true, });
+```
+- Take a screenshot of the video
+```js                                  
+context.drawImage(                 
+video,                                
+ 0,                                   
+ 0,                                    
+ video.videoWidth,                     
+ video.videoHeight,                   
+(canvas.width - imgWidth) / 2,        
+ (canvas.height - imgHeight) / 2,      
+ imgWidth,                             
+ imgHeight                             
+ );                                   
+     
+ let imageData = context.getImageData( 
+ (canvas.width - imgWidth) / 2,        
+ (canvas.height - imgHeight) / 2,      
+ imgWidth,                             
+ imgHeight                             
+ );
+```
+- Start identifying
+
+```js
+let imageData = context.getImageData((canvas.width - imgWidth) / 2, (canvas.height - imgHeight) / 2, imgWidth, imgHeight);
+let predictions = await faceModel.estimateFaces(imageData, returnTensors);
+```
+
+
+
+
+
+
+
+
 # 首个基于TensorFlow.js 将视频人脸表情数据可视化的web应用
 
 ## 简介
