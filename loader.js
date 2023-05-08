@@ -72,12 +72,12 @@ window.onload = () => {
   linkVideo.addEventListener("change", (e) => {
     clearInterval(timer);
     const url = e.target.value;
-    changeYouTobeUrl(url);
+    // changeYouTobeUrl(url);
   });
   const changeYouTobeUrl = (url) => {
     if (url.includes("https://www.youtube.com/watch")) {
       axios({
-        method: "post",
+        method: "get",
         url: `https://api.glarity.app/tube/get_media_real_url?media_url=${url}`,
       })
         .then((res) => {
